@@ -2,8 +2,9 @@ const ToDoList = require("../models/ToDoTaskModel");
 
 // controller actions
 module.exports.toDoTaskGet = async (req, res) => {
+    const { user_id } = req.body;
     try {
-        const todoList = await ToDoList.find({});
+        const todoList = await ToDoList.find({ _id: user_id }).populate("user_id");
         res.status(200).json(todoList);
     } catch (error) {
         res.status(500).json({ message: error.message }) 
@@ -11,9 +12,9 @@ module.exports.toDoTaskGet = async (req, res) => {
 }
 
 module.exports.createToDoTask = async (req, res) => {
-    const { task_title, task_desc, task_status } = req.body;
+    const { task_title, task_desc, task_status, user_id } = req.body;
     try {
-        const data = await ToDoList.create({ task_title, task_desc, task_status });
+        const data = await ToDoList.create({ task_title, task_desc, task_status, user_id });
         res.status(201).json(data);
     }
     catch (err) {
